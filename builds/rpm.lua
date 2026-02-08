@@ -1,7 +1,7 @@
 function rpm_static_build()
     darwin.dtw.copy_any_overwriting(
-        "release/" .. PROJECT_NAME .. "static_linux.out",
-        ".cache/rpm_static_build/SOURCES/" .. PROJECT_NAME .. "static_linux.out"
+        "release/" .. PROJECT_NAME .. "_linux_bin.out",
+        ".cache/rpm_static_build/SOURCES/" .. PROJECT_NAME .. "_linux_bin.out"
     )
 
     local formatted_rpm = [[
