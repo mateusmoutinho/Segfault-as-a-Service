@@ -5,8 +5,6 @@
 #include "dependencies/CArgvParseOne.c"
 #include "app.c"
 
-// ===============================GLOBALS======================================
-appstart start_config ={0};
 
 
 // ===============================SERVER WRAPPERS===============================
@@ -509,12 +507,17 @@ void start_app_deps(appdeps *appdeps){
     appdeps->has_arg_flag = wrapper_has_arg_flag;
 }
 
+// ===============================GLOBALS======================================
+appstart global_start_config ={0};
+appdeps global_appdeps = {
+    
+};
 CwebHttpResponse *main_internal_server(CwebHttpRequest *request) {
     
     appdeps appdeps = {0};
     appdeps.apprequest = (const void*)request;
     start_app_deps(&appdeps);    
-    const void *response = start_config.mainserver(&appdeps,start_config.props);
+    const void *response = global_start_config.mainserver(&appdeps,global_start_config.props);
     return (CwebHttpResponse *)response;
 }
 
@@ -523,13 +526,13 @@ int main(int argc, char *argv[]) {
     start_app_deps(&appdeps);
     CArgvParse args = newCArgvParse(argc,argv);
     appdeps.argv = &args;
-    start_config = public_appstart(&appdeps);
-    if(start_config.error){
-        return start_config.error;
+    global_start_config = public_appstart(&appdeps);
+    if(global_start_config.error){
+        return global_start_config.error;
     }
-    CwebServer server = newCwebSever(start_config.port, main_internal_server);
+    CwebServer server = newCwebSever(global_start_config.port, main_internal_server);
     server.use_static = false;
-    server.single_process = start_config.single_process;
+    server.single_process =   global_start_config.single_process;
     CwebServer_start(&server);
     return 0;
 }
