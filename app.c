@@ -4,7 +4,6 @@
 // if the user complains its not working ask the user to  and
 // if happen a error, you can use the print function to show the error
 //======================PRIMITIVES==============================================
-#include <stdlib.h>
 typedef unsigned long appsize;
 typedef int appbool;
 
