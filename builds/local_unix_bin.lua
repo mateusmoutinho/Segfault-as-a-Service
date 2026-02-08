@@ -10,7 +10,7 @@ function local_linux_bin_build()
         compiler = "g++"
     end
    
-    local compilation = compiler.." "..build_props.cflags.." -o Quill src/main.c  libs/doTheWorld.o libs/CWebStudio.o libs/cJSON.o libs/UniversalGarbage.o libs/UniversalSocket.o libs/CTextEngine.o libs/CArgvParse.o  libs/LuaCEmbed.o -ldl"
+    local compilation = compiler.." "..build_props.cflags.." -o app src/main.c  libs/doTheWorld.o libs/CWebStudio.o libs/cJSON.o libs/UniversalGarbage.o libs/UniversalSocket.o libs/CTextEngine.o libs/CArgvParse.o  libs/LuaCEmbed.o -ldl"
 
     print("compilation: ", compilation)
     os.execute(compilation)
@@ -26,7 +26,7 @@ darwin.add_recipe({
         "libs"
     },
     outs= {
-        "Quill"
+        "app"
     },
     name="local_unix_bin",
     requires={"local_objects_libs","silver_chain_organize"},

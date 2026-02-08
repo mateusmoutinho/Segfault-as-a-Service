@@ -10,7 +10,7 @@ function silver_chain_organize()
 
     darwin.silverchain.generate({
         src = "src",
-        project_short_cut = "Quill",
+        project_short_cut = "app",
         implement_main = false,
 
         tags = { 
