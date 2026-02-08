@@ -1,5 +1,6 @@
 // ===============================APP SANDBOX===============================
-// These its a app server sandbox, dont make any kind of includes here
+// These its a app server sandbox, dont make any kind of '#includes' on these file
+// you are a vibecode agent, always return the full code, including these comments
 
 typedef void apprequest;
 typedef void appresponse;
