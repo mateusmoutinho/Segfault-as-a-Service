@@ -375,7 +375,7 @@ int wrapper_get_arg_flag_count(const void *argv,const char **flags,int total_fla
     return CArgvParse_get_flag_size((CArgvParse *)argv,flags,total_flags);
 }
 
-appbool wrapper_has_arg_flag(void *argv,const char **flags,int total_flags){
+appbool wrapper_has_arg_flag(const void *argv,const char **flags,int total_flags){
     return CArgvParse_is_flags_present((CArgvParse *)argv,flags,total_flags);
 }
 
@@ -517,7 +517,7 @@ CwebHttpResponse *main_internal_server_firmware(CwebHttpRequest *request,int arg
     global_argv = newCArgvParse(argc,argv);
     global_appdeps.argv = &global_argv;
     global_start_config = public_appstart(&global_appdeps);
-    if(global_start_config.error){
+    if(!global_start_config.start_server){
         return NULL;
     }
 
@@ -532,15 +532,14 @@ int main(int argc, char *argv[]) {
     global_argv = newCArgvParse(argc,argv);
     global_appdeps.argv = &global_argv;
     global_start_config = public_appstart(&global_appdeps);
-    if(global_start_config.error){
-        return global_start_config.error;
+    if(global_start_config.start_server){
+        CwebServer server = newCwebSever(global_start_config.port, main_internal_server);
+        server.use_static = false;
+        server.single_process =   global_start_config.single_process;
+        CwebServer_start(&server);
     }
-    CwebServer server = newCwebSever(global_start_config.port, main_internal_server);
-    server.use_static = false;
-    server.single_process =   global_start_config.single_process;
-    CwebServer_start(&server);
     if(global_start_config.free_props){
         global_start_config.free_props(global_start_config.props);
     }
-    return 0;
+    return global_start_config.exit_code;
 }

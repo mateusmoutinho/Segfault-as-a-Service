@@ -165,7 +165,8 @@ typedef struct appdeps{
 
 typedef struct appstart {
     int port;
-    int error;
+    int exit_code;
+    appbool start_server;
     void *props;
 
     appbool single_process;  
@@ -189,7 +190,8 @@ appstart public_appstart(appdeps *deps){
     if(start_port){
         appstart.port = deps->atoi(start_port);
         if(appstart.port <= 0){
-            appstart.error = 1;
+            appstart.exit_code = 1;
+            appstart.start_server = app_false;
             deps->printf("Invalid port number: %s\n", start_port);
             return appstart;
         }
@@ -200,7 +202,7 @@ appstart public_appstart(appdeps *deps){
     deps->sprintf(props,"Hello World from start");
     appstart.props = props;
     appstart.free_props = deps->free;
-    appstart.error = app_false;
+    appstart.start_server = app_true;
     appstart.mainserver = private_mainserver;
     return appstart;
 }
