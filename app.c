@@ -181,8 +181,8 @@ const appresponse * private_mainserver(appdeps *deps,void *props){
 appstart public_appstart(appdeps *deps){
 
     appstart appstart = {0};
-
-    const char *start_port = deps->get_arg_flag_value(deps->argv, (const char *[]){"port","p"}, 2, 0);
+    const char *PORT_FLAGS[] = {"port","p"};
+    const char *start_port = deps->get_arg_flag_value(deps->argv, PORT_FLAGS, sizeof(PORT_FLAGS)/sizeof(PORT_FLAGS[0]), 0);
     if(start_port){
         appstart.port = deps->atoi(start_port);
         if(appstart.port <= 0){
