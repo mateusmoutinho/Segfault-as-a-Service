@@ -32,7 +32,10 @@ const char *wrapper_get_method(const void *apprequest){
     CwebHttpRequest *request = (CwebHttpRequest *)apprequest;
     return request->method;
 }
-
+const char *wrapper_get_query_param(const void *apprequest, const char *key){
+    CwebHttpRequest *request = (CwebHttpRequest *)apprequest;
+    return CwebHttpRequest_get_param(request, key);
+}
 
 const char *wrapper_get_query_param_key(const void *apprequest, int index){
     CwebHttpRequest *request = (CwebHttpRequest *)apprequest;
@@ -82,6 +85,7 @@ CwebHttpResponse *main_internal_server(CwebHttpRequest *request) {
         .get_headder_key = wrapper_get_headder_key,
         .get_headder_value = wrapper_get_headder_value,
         .get_method = wrapper_get_method,
+        .get_query_param = wrapper_get_query_param,
         .get_query_param_key = wrapper_get_query_param_key,
         .get_query_param_value = wrapper_get_query_param_value,
         .read_body = wrapper_read_body,
