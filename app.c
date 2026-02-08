@@ -17,6 +17,7 @@ typedef void apprequest;
 typedef void appresponse;
 typedef void appjson;
 typedef void appstringarray;
+typedef void appargv;
 
 //======================APP DEPS==============================================
 typedef struct appdeps{
@@ -148,7 +149,17 @@ typedef struct appdeps{
     appbool (*file_exists)(const char *path);
     appbool (*dir_exists)(const char *path);
     
+    //======================ARGV PARSER FUNCTIONS ======================================
+    const appargv *argv;
+    const char *(*get_arg_value)(appargv *argv,int index); // positional arguments
+    int (*get_arg_count)(appargv *argv); // number of arguments
 
+    // use const char *help[] = {"--help","-h"}; for retriving flags
+    const char *(*get_arg_flag_value)(appargv *argv,const char **flags,int total_flags,int index); // --name || n mateus : mateus
+    int (*get_arg_flag_count)(appargv *argv,const char **flags,int total_flags); // --name || n : true
+
+    appbool (*has_arg_flag)(appargv *argv,const char **flags,int total_flags); // --name : true
+    
 
 } appdeps;
 

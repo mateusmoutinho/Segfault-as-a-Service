@@ -4,6 +4,11 @@
 #include "dependencies/CWebStudioOne.c"
 #include "dependencies/CArgvParseOne.c"
 #include "app.c"
+
+// ===============================GLOBALS======================================
+int global_argc;
+char **global_argv;
+
 // ===============================SERVER WRAPPERS===============================
 
 const char *wrapper_get_route(const void *apprequest){
@@ -356,6 +361,27 @@ void *wrapper_list_any_recursively(const char *path){
     return (void *)all;
 }
 
+//================================ARGV PARSER FUNCTIONS================================
+const char *wrapper_get_arg_value(void *argv,int index){
+    return CArgvParse_get_arg((CArgvParse *)argv,index);
+}
+int wrapper_get_arg_count(void *argv){
+    return ((CArgvParse *)argv)->total_args;
+}
+
+const char *wrapper_get_arg_flag_value(void *argv,const char **flags,int total_flags,int index){
+    return CArgvParse_get_flag((CArgvParse *)argv,flags,total_flags,index);
+}
+
+int wrapper_get_arg_flag_count(void *argv,const char **flags,int total_flags){
+    return CArgvParse_get_flag_size((CArgvParse *)argv,flags,total_flags);
+}
+
+appbool wrapper_has_arg_flag(void *argv,const char **flags,int total_flags){
+    return CArgvParse_is_flags_present((CArgvParse *)argv,flags,total_flags);
+}
+
+
 // ===============================APP===============================
 void start_app_deps(appdeps *appdeps){
     
@@ -474,6 +500,13 @@ void start_app_deps(appdeps *appdeps){
     appdeps->list_files_recursively = wrapper_list_files_recursively;
     appdeps->list_dirs_recursively = wrapper_list_dirs_recursively;
     appdeps->list_any_recursively = wrapper_list_any_recursively;
+
+    // ArgvParse functions
+    appdeps->get_arg_value = wrapper_get_arg_value;
+    appdeps->get_arg_count = wrapper_get_arg_count;
+    appdeps->get_arg_flag_value = wrapper_get_arg_flag_value;
+    appdeps->get_arg_flag_count = wrapper_get_arg_flag_count;
+    appdeps->has_arg_flag = wrapper_has_arg_flag;
 }
 
 CwebHttpResponse *main_internal_server(CwebHttpRequest *request) {
@@ -481,11 +514,13 @@ CwebHttpResponse *main_internal_server(CwebHttpRequest *request) {
     appdeps appdeps = {0};
     appdeps.apprequest = (const void*)request;
     start_app_deps(&appdeps);    
-   const void *response = mainserver(&appdeps);
-   return (CwebHttpResponse *)response;
+    const void *response = mainserver(&appdeps);
+    return (CwebHttpResponse *)response;
 }
 
 int main(int argc, char *argv[]) {
+    global_argc = argc;
+    global_argv = argv;
     CwebServer server = newCwebSever(5000, main_internal_server);
     CwebServer_start(&server);
     return 0;
