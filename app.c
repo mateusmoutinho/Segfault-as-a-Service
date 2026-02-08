@@ -17,7 +17,7 @@ typedef int appbool;
 typedef struct appdeps{
 
 
-    //=====================std==============================================
+    //=====================STD FUNCTIONS==============================================
     int (*printf)(const char *format, ...);
     int (*sprintf)(char *str, const char *format, ...);
     int (*snprintf)(char *str, appsize size, const char *format, ...);
@@ -25,10 +25,14 @@ typedef struct appdeps{
     appsize (*strlen)(const char *s);
     char *(*strcpy)(char *dst, const char *src);
 
-    //nuber conversions
+    //======================CONVERSION FUNCTIONS==============================================
     int (*atoi)(const char *str);
     double (*atof)(const char *str);
-
+    //======================MEM FUNCTIONS==============================================
+    void (*free)(void *ptr);
+    void *(*malloc)(appsize size);
+    void *(*calloc)(appsize num, appsize size);
+    void *(*realloc)(void *ptr, appsize size);
     //=====================request==============================================
     const apprequest *apprequest;
     const char * (*get_route)(const apprequest *apprequest);
@@ -106,8 +110,15 @@ typedef struct appdeps{
     char *(*json_get_string_value)(const appjson *item);
     double (*json_get_number_value)(const appjson *item);
 
-    //=====================JSON COMPARISON==============================================
+    //=====================JSON COMPARISON=================================================
     appbool (*json_compare)(const appjson *a, const appjson *b, appbool case_sensitive);
+    //======================IO FUNCTIONS ==================================================
+    unsigned char * (*read_any)(const char *path,long *size);
+    char * (*read_string)(const char *path); // needs to bee free
+    void (*write_any)(const char *path,unsigned char *content, long size);
+    void (*write_string)(const char *path,char *content);
+    
+
 
 } appdeps;
 
