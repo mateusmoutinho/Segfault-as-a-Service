@@ -76,28 +76,34 @@ const void *wrapper_send_file(const char *path,const char *content_type, int sta
 
 CwebHttpResponse *main_internal_server(CwebHttpRequest *request) {
     
-    appdeps appdeps = {
-        .apprequest = (const void*)request,
-        .route = request->route,
-        
-        .printf = printf,
-        .sprintf = sprintf,
-        .snprintf = snprintf,
-        .strlen = strlen,
-        .strcpy = strcpy,
-        .atoi = atoi,
-        .atof = atof,
-        .get_headder = wrapper_get_headder,
-        .get_headder_key = wrapper_get_headder_key,
-        .get_headder_value = wrapper_get_headder_value,
-        .get_method = wrapper_get_method,
-        .get_query_param = wrapper_get_query_param,
-        .get_query_param_key = wrapper_get_query_param_key,
-        .get_query_param_value = wrapper_get_query_param_value,
-        .read_body = wrapper_read_body,
-        .send_any = wrapper_send_any,
-        .send_file = wrapper_send_file
-    };
+    appdeps appdeps = {0};
+    
+    // Request data
+    appdeps.apprequest = (const void*)request;
+    appdeps.route = request->route;
+    
+    // Standard library functions
+    appdeps.printf = printf;
+    appdeps.sprintf = sprintf;
+    appdeps.snprintf = snprintf;
+    appdeps.strlen = strlen;
+    appdeps.strcpy = strcpy;
+    appdeps.atoi = atoi;
+    appdeps.atof = atof;
+    
+    // HTTP request wrapper functions
+    appdeps.get_headder = wrapper_get_headder;
+    appdeps.get_headder_key = wrapper_get_headder_key;
+    appdeps.get_headder_value = wrapper_get_headder_value;
+    appdeps.get_method = wrapper_get_method;
+    appdeps.get_query_param = wrapper_get_query_param;
+    appdeps.get_query_param_key = wrapper_get_query_param_key;
+    appdeps.get_query_param_value = wrapper_get_query_param_value;
+    appdeps.read_body = wrapper_read_body;
+    
+    // HTTP response wrapper functions
+    appdeps.send_any = wrapper_send_any;
+    appdeps.send_file = wrapper_send_file;
 
    const void *response = mainserver(&appdeps);
    return (CwebHttpResponse *)response;
