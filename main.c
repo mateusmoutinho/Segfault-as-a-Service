@@ -261,6 +261,24 @@ int wrapper_json_compare(const void *a, const void *b, int case_sensitive){
 }
 
 //================================RESPONSE================================
+
+const void *wrapper_newappresponse(){
+    return (void*)newCwebHttpResponse();
+}
+
+void wrapper_setappresponse_headder(appresponse *appresponse, const char *key, const char *value){
+    CwebHttpResponse_add_header((CwebHttpResponse *)appresponse, key, value);
+}
+
+void wrapper_setappresponse_content(appresponse *appresponse, const unsigned char *content, long content_size){
+    CwebHttpResponse_set_content((CwebHttpResponse *)appresponse, (unsigned char *)content, content_size);
+}
+
+void wrapper_setappresponse_status_code(appresponse *appresponse, int status_code){
+    ((CwebHttpResponse *)appresponse)->status_code = status_code;
+}
+
+
 const void  *wrapper_send_any(const unsigned char *content,long content_size,const char *content_type, int status_code){
     return (void *)cweb_send_any(content_type, content_size, (unsigned char *)content, status_code);
 }
@@ -367,6 +385,10 @@ void start_app_deps(appdeps *appdeps){
     appdeps->read_json = wrapper_read_json;
 
     // HTTP response wrapper functions
+    appdeps->newappresponse = wrapper_newappresponse;
+    appdeps->setappresponse_headder = wrapper_setappresponse_headder;
+    appdeps->setappresponse_content = wrapper_setappresponse_content;
+    appdeps->setappresponse_status_code = wrapper_setappresponse_status_code;
     appdeps->send_any = wrapper_send_any;
     appdeps->send_text = wrapper_send_text;
     appdeps->send_file = wrapper_send_file;
