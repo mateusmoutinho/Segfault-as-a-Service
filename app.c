@@ -167,6 +167,8 @@ typedef struct appstart {
     int port;
     int error;
     void *props;
+
+    appbool single_process;  
     const appresponse * (*mainserver)(appdeps *d,void *props);
     void (*free_props)(void *props);
 } appstart;

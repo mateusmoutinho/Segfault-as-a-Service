@@ -528,6 +528,8 @@ int main(int argc, char *argv[]) {
         return start_config.error;
     }
     CwebServer server = newCwebSever(start_config.port, main_internal_server);
+    server.use_static = false;
+    server.single_process = start_config.single_process;
     CwebServer_start(&server);
     return 0;
 }
