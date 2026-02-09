@@ -1,0 +1,11 @@
+{
+  "files.exclude": {
+    "dependencies/**/*.c": true
+  },
+  "search.exclude": {
+    "dependencies/**/*.c": true
+  },
+  "C_Cpp.files.exclude": {
+    "dependencies/**/*.c": true
+  }
+}

@@ -13,6 +13,8 @@ typedef int appbool;
 
 
 //======================APP TYPES==============================================
+typedef void appclientrequest;
+typedef void appclientresponse;
 typedef void appserverrequest;
 typedef void appserverresponse;
 typedef void appjson;
@@ -160,7 +162,9 @@ typedef struct appdeps{
 
     appbool (*has_arg_flag)(const appargv *argv,const char **flags,int total_flags); // --name : true
     
-
+    appclientrequest *(*newappclientrequest)(const char *url);
+    void (*set_appclientrequest_headder)(appclientrequest *request,const char *key, const char *value);
+    void (*free_clientrequest)(appclientrequest *request);
 } appdeps;
 
 typedef struct appstart {

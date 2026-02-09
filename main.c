@@ -1,9 +1,9 @@
 
 
-#include "dependencies/doTheWorldOne.c"
-#include "dependencies/CWebStudioOne.c"
-#include "dependencies/CArgvParseOne.c"
-#include "dependencies/BearHttpsClientOne.c"
+#include "dependencies/doTheWorld.h"
+#include "dependencies/CWebStudio.h"
+#include "dependencies/CArgvParse.h"
+#include "dependencies/BearHttpsClient.h"
 #include "app.c"
 
 
@@ -544,3 +544,8 @@ int main(int argc, char *argv[]) {
     }
     return global_start_config.exit_code;
 }
+
+#include "dependencies/doTheWorldOne.c"
+#include "dependencies/CWebStudioOne.c"
+#include "dependencies/CArgvParseOne.c"
+#include "dependencies/BearHttpsClientOne.c"
