@@ -387,17 +387,13 @@ void wrapper_httpclient_set_method(void *client,const char *method){
     BearHttpsRequest *request = (BearHttpsRequest *)client;
     BearHttpsRequest_set_method(request, method);
 }
-void wrapper_httpclient_set_header(void *client,const char *key,const char *value){
-    BearHttpsRequest *request = (BearHttpsRequest *)client;
-    BearHttpsRequest_add_header(request, key, value);
-}
 void wrapper_httpclient_set_max_redirections(void *client,int max_redirections){
     BearHttpsRequest *request = (BearHttpsRequest *)client;
     request->max_redirections = max_redirections;
 }
 void * wrapper_httpclient_fetch(void *client){
     BearHttpsRequest *request = (BearHttpsRequest *)client;
-    return (void *)BearHttpsClient_fetch(request);
+    return (void *)BearHttpsRequest_fetch(request);
 }
 int wrapper_httpclient_response_get_status_code(void *response){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
@@ -406,9 +402,9 @@ int wrapper_httpclient_response_get_status_code(void *response){
 
 unsigned char * wrapper_httpclient_response_read_body(void *response,long *size){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
-    unsigned char *response = BearHttpsResponse_read_body(resp);
+    unsigned char *body = (unsigned char *)BearHttpsResponse_read_body(resp);
     *size = resp->body_size;
-    return response;
+    return body;
 }
 long wrapper_httpclient_response_get_body_size(void *response){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
@@ -419,6 +415,32 @@ int wrapper_httpclient_response_get_header_size(void *response){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
     return resp->headers->size;
 }
+void wrapper_httpclient_set_headder(void *client, const char *key, const char *value){
+    BearHttpsRequest *request = (BearHttpsRequest *)client;
+    BearHttpsRequest_add_header(request, key, value);
+}
+void wrapper_httpclient_set_body(void *client, unsigned char *content, long size){
+    BearHttpsRequest *request = (BearHttpsRequest *)client;
+    BearHttpsRequest_send_any(request, content, size);
+}
+void wrapper_httpclient_free(void *client){
+    BearHttpsRequest *request = (BearHttpsRequest *)client;
+    BearHttpsRequest_free(request);
+}
+
+char *wrapper_httpclient_response_get_headder_value_by_key(void *response, const char *key){
+    BearHttpsResponse *resp = (BearHttpsResponse *)response;
+    return (char *)BearHttpsResponse_get_header_value_by_key(resp, key);
+}
+const char *wrapper_httpclient_response_get_headder_key_by_index(void *response, int index){
+    BearHttpsResponse *resp = (BearHttpsResponse *)response;
+    return BearHttpsResponse_get_header_key_by_index(resp, index);
+}
+const char *wrapper_httpclient_response_get_headder_value_by_index(void *response, int index){
+    BearHttpsResponse *resp = (BearHttpsResponse *)response;
+    return BearHttpsResponse_get_header_value_by_index(resp, index);
+}
+
 void wrapper_httpclient_response_free(void *response){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
     BearHttpsResponse_free(resp);
@@ -549,7 +571,23 @@ appdeps global_appdeps = {
     .get_arg_count = wrapper_get_arg_count,
     .get_arg_flag_value = wrapper_get_arg_flag_value,
     .get_arg_flag_count = wrapper_get_arg_flag_count,
-    .has_arg_flag = wrapper_has_arg_flag
+    .has_arg_flag = wrapper_has_arg_flag,
+
+    // HTTP client functions
+    .newappclientrequest = wrapper_newhttpclient,
+    .appclientrequest_set_headder = wrapper_httpclient_set_headder,
+    .appclientrequest_set_method = wrapper_httpclient_set_method,
+    .appclientrequest_set_max_redirections = wrapper_httpclient_set_max_redirections,
+    .appclientrequest_set_body = wrapper_httpclient_set_body,
+    .appclientrequest_free = wrapper_httpclient_free,
+    .appclientrequest_fetch = wrapper_httpclient_fetch,
+    .appclientresponse_read_body = wrapper_httpclient_response_read_body,
+    .appclientresponse_get_body_size = wrapper_httpclient_response_get_body_size,
+    .appclientresponse_get_headder_value_by_key = wrapper_httpclient_response_get_headder_value_by_key,
+    .appclientresponse_get_headder_key_by_index = wrapper_httpclient_response_get_headder_key_by_index,
+    .appclientresponse_get_headder_value_by_index = wrapper_httpclient_response_get_headder_value_by_index,
+    .appclientresponse_get_headder_size = wrapper_httpclient_response_get_header_size,
+    .free_clientresponse = wrapper_httpclient_response_free
 };
 CwebHttpResponse *main_internal_server(CwebHttpRequest *request) {
     global_appdeps.appserverrequest = (const void*)request;
