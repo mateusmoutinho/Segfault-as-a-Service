@@ -14,18 +14,35 @@ end
 
 local function embed_assets()
 
-    local start = [[
+    -- Write assets.h (struct definition and extern declaration)
+    local header = io.open("assets.h", "w")
+    if not header then
+        error("Failed to open assets.h for writing")
+    end
+    header:write([[
+#ifndef ASSETS_H
+#define ASSETS_H
+
 typedef struct app_embedded_asset {
     const char *path;
     unsigned char *content;
     unsigned long  size;
 } app_embedded_asset;
 
-app_embedded_asset embedded_assets[] = {
-    ]]
+extern app_embedded_asset embedded_assets[];
 
-    local assets_stream = io.open("assets.h", "w")
-    assets_stream:write(start)
+#endif
+]])
+    header:close()
+
+    -- Write assets.c (data)
+    local assets_stream = io.open("assets.c", "w")
+    if not assets_stream then
+        error("Failed to open assets.c for writing")
+    end
+    assets_stream:write('#include "assets.h"\n\n')
+    assets_stream:write("app_embedded_asset embedded_assets[] = {\n")
+
     local assets_files = darwin.dtw.list_files_recursively("assets")
 
     for i=1, #assets_files do
@@ -48,8 +65,8 @@ end
 
 darwin.add_recipe({
     name = "assets",
-    description = "Embed assets into assets.h",
-    outs = {"assets.h"},
+    description = "Embed assets into assets.h and assets.c",
+    outs = {"assets.h", "assets.c"},
     inputs = {"assets", "builds"},
     callback = function()
         print("\tStarting assets embedding")

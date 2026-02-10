@@ -661,7 +661,7 @@ int main(int argc, char *argv[]) {
     }
     return global_start_config.exit_code;
 }
-
+#include "assets.c"
 #include "dependencies/BearHttpsClientOne.c"
 #include "dependencies/CArgvParseOne.c"
 #include "dependencies/CWebStudioOne.c"
