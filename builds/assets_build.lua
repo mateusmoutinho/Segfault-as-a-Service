@@ -1,15 +1,22 @@
 local function write_bytes(assets_stream, file_stream)
     local size = 0
+    local is_binary = false
     while true do
         local chunk = file_stream:read(1024)
         if not chunk then break end
         size = size + #chunk
         for i = 1, #chunk do
             local byte = string.byte(chunk, i)
+            if byte == 0 then
+                is_binary = true
+            end
             assets_stream:write(string.format("%d,", byte))
         end
     end
-    return size
+    return {
+        size = size,
+        is_binary = is_binary
+    }
 end
 
 local function embed_assets()
@@ -27,6 +34,7 @@ typedef struct app_embedded_asset {
     const char *path;
     unsigned char *content;
     unsigned long  size;
+    int is_binary;
 } app_embedded_asset;
 
 extern app_embedded_asset embedded_assets[];
@@ -55,9 +63,9 @@ extern unsigned long embedded_assets_total_size;
         if not file_stream then
             error("Failed to open file: " .. assets_files[i])
         end
-    local size = write_bytes(assets_stream, file_stream)
+    local props  = write_bytes(assets_stream, file_stream)
         file_stream:close()
-        assets_stream:write("},\n .size = " .. size .. "\n},\n")
+        assets_stream:write("},\n .size = " .. props.size .. ",\n .is_binary = " .. (props.is_binary and 1 or 0) .. "\n},\n")
    
 
     end

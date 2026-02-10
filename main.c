@@ -483,15 +483,36 @@ void wrapper_httpclient_response_free(void *response){
 }
 unsigned char *wrapper_get_asset_content(const char *path,long *size,bool *is_binary){
    #if !defined(NOT_EMBED) || defined(DEBUG)
+    for(int i=0; i < embedded_assets_total_size; i++){
+        if(strcmp(embedded_assets[i].path, path) == 0){
+            *size = embedded_assets[i].size;
+            *is_binary = embedded_assets[i].is_binary;
+            return embedded_assets[i].content;
+        }
+    }
+    return NULL;
    #else 
         return dtw_load_any_content(path, size, is_binary);
    #endif
 }
 void *wrapper_list_assets(const char *path){
     #if !defined(NOT_EMBED) || defined(DEBUG)
-        
+        DtwStringArray *array = newDtwStringArray();
+        for(int i=0; i < embedded_assets_total_size; i++){
+            if(dtw_starts_with(embedded_assets[i].path, path)){
+                DtwStringArray_append(array, embedded_assets[i].path);
+            }
+        }
+        return (void *)array;
     #else 
         return (void *)dtw_list_files_recursively(path,false);
+    #endif
+}
+void wrapper_free_asset(void *asset){
+    #if !defined(NOT_EMBED) || defined(DEBUG)
+        // No need to free embedded assets
+    #else 
+        free(asset);
     #endif
 }
 // ===============================GLOBALS======================================
