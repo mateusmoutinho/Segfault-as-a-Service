@@ -178,6 +178,9 @@ typedef struct appdeps{
     int (*appclientresponse_get_headder_size)(appclientresponse *appclientresponse);
     void (*free_clientresponse)(appclientresponse *appclientresponse);
 
+    //============================ASSETS==================================================
+    const unsigned char * (*get_asset_content)(const char *path,long *size);
+    appstringarray * (*list_assets)(const char *path);
 
     
 

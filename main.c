@@ -8,6 +8,7 @@
 
 #include "dependencies/CWebStudio.h"
 #include "dependencies/CArgvParse.h"
+#include "assets.h"
 #include "app.c"
 
 
@@ -475,7 +476,9 @@ void wrapper_httpclient_response_free(void *response){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
     BearHttpsResponse_free(resp);
 }
-
+unsigned char *wrapper_get_asset_content(const char *path,long *size){
+   
+}
 // ===============================GLOBALS======================================
 CArgvParse global_argv = {0};
 appstart global_start_config ={0};
