@@ -1,5 +1,5 @@
 PROJECT_NAME = "Cortex"
-CONTANIZER   = darwin.argv.get_flag_arg_by_index({ "provider", "contanizer" }, 1, "podman")
+CONTANIZER   = darwin.argv.get_flag_arg_by_index({ "provider", "contanizer" }, 1, "docker")
 PORT  = darwin.argv.get_flag_arg_by_index({ "port" }, 1, "5000")
 VERSION      = "0.1.0"
 LICENSE      = "Unlicense"
