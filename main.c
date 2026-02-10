@@ -1,3 +1,6 @@
+#include "app.c"
+
+
 #if defined(_WIN32) || defined(_WIN64)
     #include <winsock2.h>
 #endif 
@@ -8,8 +11,10 @@
 
 #include "dependencies/CWebStudio.h"
 #include "dependencies/CArgvParse.h"
+#if !defined(NOT_EMBED) || defined(DEBUG)
 #include "assets.h"
-#include "app.c"
+#endif
+
 
 
 
@@ -476,8 +481,18 @@ void wrapper_httpclient_response_free(void *response){
     BearHttpsResponse *resp = (BearHttpsResponse *)response;
     BearHttpsResponse_free(resp);
 }
-unsigned char *wrapper_get_asset_content(const char *path,long *size){
-   
+unsigned char *wrapper_get_asset_content(const char *path,long *size,bool *is_binary){
+   #if !defined(NOT_EMBED) || defined(DEBUG)
+   #else 
+        return dtw_load_any_content(path, size, is_binary);
+   #endif
+}
+void *wrapper_list_assets(const char *path){
+    #if !defined(NOT_EMBED) || defined(DEBUG)
+        
+    #else 
+        return (void *)dtw_list_files_recursively(path,false);
+    #endif
 }
 // ===============================GLOBALS======================================
 CArgvParse global_argv = {0};
@@ -661,7 +676,9 @@ int main(int argc, char *argv[]) {
     }
     return global_start_config.exit_code;
 }
-#include "assets.c"
+#if !defined(NOT_EMBED) || defined(DEBUG)
+    #include "assets.h"
+#endif
 #include "dependencies/BearHttpsClientOne.c"
 #include "dependencies/CArgvParseOne.c"
 #include "dependencies/CWebStudioOne.c"

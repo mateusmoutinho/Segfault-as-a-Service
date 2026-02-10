@@ -30,6 +30,7 @@ typedef struct app_embedded_asset {
 } app_embedded_asset;
 
 extern app_embedded_asset embedded_assets[];
+extern unsigned long embedded_assets_total_size;
 
 #endif
 ]])
@@ -43,8 +44,9 @@ extern app_embedded_asset embedded_assets[];
     assets_stream:write('#include "assets.h"\n\n')
     assets_stream:write("app_embedded_asset embedded_assets[] = {\n")
 
-    local assets_files = darwin.dtw.list_files_recursively("assets")
 
+    local assets_files = darwin.dtw.list_files_recursively("assets")
+    local total_size = #assets_files
     for i=1, #assets_files do
 
         assets_stream:write("{\n.path = \"" .. assets_files[i] .. "\",\n .content = (unsigned char[]){")
@@ -53,13 +55,15 @@ extern app_embedded_asset embedded_assets[];
         if not file_stream then
             error("Failed to open file: " .. assets_files[i])
         end
-        local size = write_bytes(assets_stream, file_stream)
+    local size = write_bytes(assets_stream, file_stream)
         file_stream:close()
         assets_stream:write("},\n .size = " .. size .. "\n},\n")
+   
 
     end
 
     assets_stream:write("};\n")
+    assets_stream:write("\nunsigned long embedded_assets_total_size = " .. total_size .. ";\n")
     assets_stream:close()
 end
 
