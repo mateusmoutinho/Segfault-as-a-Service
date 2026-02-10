@@ -10,5 +10,6 @@ app
 a.exe
 start_firmware.sh
 debug.so
+assets.h
 dependencies
 a.out
