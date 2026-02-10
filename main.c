@@ -54,6 +54,10 @@ void *wrapper_memset(void *s, int c, unsigned long n){
     return memset(s, c, (size_t)n);
 }
 
+int wrapper_strncmp(const char *s1, const char *s2, unsigned long n){
+    return strncmp(s1, s2, (size_t)n);
+}
+
 int wrapper_memcmp(const void *s1, const void *s2, unsigned long n){
     return memcmp(s1, s2, (size_t)n);
 }
@@ -596,7 +600,7 @@ appdeps global_appdeps = {
     .strcpy = strcpy,
     .strcat = strcat,
     .strcmp = strcmp,
-    .strncmp = strncmp,
+    .strncmp = wrapper_strncmp,
     .strstr = strstr,
     .strdup = wrapper_strdup,
     .memcpy = wrapper_memcpy,
