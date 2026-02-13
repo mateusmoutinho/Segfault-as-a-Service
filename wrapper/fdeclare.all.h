@@ -1,3 +1,7 @@
+//silver_chain_scope_start
+//mannaged by silver chain: https://github.com/OUIsolutions/SilverChain
+#include "imports/imports.dep_declare.h"
+//silver_chain_scope_end
 //fdefine.https_client.c
 void *wrapper_newhttpclient(const char *url);
 void wrapper_httpclient_set_method(void *client,const char *method);
