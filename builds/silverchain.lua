@@ -6,8 +6,8 @@ function silver_chain_organize()
         endswith=".c",
     })
 
-    darwin.dtw.write_file("wrapper/imports/fdeclare.all.h", content)
-    darwin.silverchain.remove("wrapper/imports/fdeclare.all.h")
+    darwin.dtw.write_file("wrapper/fdeclare.all.h", content)
+    darwin.silverchain.remove("wrapper/fdeclare.all.h")
 
     darwin.silverchain.generate({
         src = "wrapper",
