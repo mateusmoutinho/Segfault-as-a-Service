@@ -1,18 +1,17 @@
 [
-
     {
         "dest": "dependencies/doTheWorldOne.c",
         "file": "doTheWorldOne.c",
         "repo": "OUIsolutions/DoTheWorld",
-        "tag": "11.2.0",
+        "tag": "11.2.1",
         "type": "gitrelease",
         "updated_at": "2025-12-01T13:25:26Z"
     },
-        {
+    {
         "dest": "dependencies/doTheWorld.h",
         "file": "doTheWorld.h",
         "repo": "OUIsolutions/DoTheWorld",
-        "tag": "11.2.0",
+        "tag": "11.2.1",
         "type": "gitrelease",
         "updated_at": "2025-12-01T13:25:26Z"
     },
@@ -24,7 +23,7 @@
         "type": "gitrelease",
         "updated_at": "2025-11-29T04:22:16Z"
     },
-        {
+    {
         "dest": "dependencies/CWebStudio.h",
         "file": "CWebStudio.h",
         "repo": "OUIsolutions/CWebStudio",
@@ -32,7 +31,6 @@
         "type": "gitrelease",
         "updated_at": "2025-11-29T04:22:16Z"
     },
-
     {
         "dest": "dependencies/CArgvParseOne.c",
         "file": "CArgvParseOne.c",
@@ -41,7 +39,7 @@
         "type": "gitrelease",
         "updated_at": "2026-02-08T21:52:00Z"
     },
-        {
+    {
         "dest": "dependencies/CArgvParse.h",
         "file": "CArgvParse.h",
         "repo": "OUIsolutions/C-argv-parser",
@@ -57,7 +55,7 @@
         "type": "gitrelease",
         "updated_at": "2026-02-08T22:56:49Z"
     },
-        {
+    {
         "dest": "dependencies/BearHttpsClient.h",
         "file": "BearHttpsClient.h",
         "repo": "OUIsolutions/BearHttpsClient",
